@@ -1,0 +1,235 @@
+.app {
+  text-align: center;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 150px;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+  z-index: 3;
+}
+
+.modal-popup {
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  font-size: x-large;
+  color: black;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  flex-direction: column;
+}
+
+.app-card-item {
+  background-color: #99E1D9;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  color: white;
+  position: relative;
+  z-index: 0;
+}
+
+.app-circle {
+  font-size: 10em; /* This controls the size. */
+  display: inline-block;
+  border: 0.1em solid #9ABCA7;
+  position: relative;
+  border-radius: 0.35em;
+  margin-left: 3px;
+}
+
+.app-cross {
+  background: rgb(238, 123, 115);
+  height: 100px;
+  position: relative;
+  width: 20px;
+  transform: rotate(45deg)
+}
+.app-cross:after {
+  background: rgb(238, 123, 115);
+  content: "";
+  height: 20px;
+  left: -40px;
+  position: absolute;
+  top: 40px;
+  width: 100px;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+
+  text-align: center;
+  width: 450px;
+  height: 450px;
+  margin: auto;
+}
+
+.app-container-lives {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(1, 100px);
+  grid-gap: 0rem;
+
+  text-align: center;
+  width: 300px;
+  height: 300px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.app-header {
+  background-color: #19535F;
+  height: 100px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+
+.app-scoreboard {
+  height: 90px;
+  width: 90px;
+  background-color: #ABC8C0;
+  border-radius: 15%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: large;
+  margin-left: 10px;
+}
+
+.app-title {
+  font-size: 1.5em;
+}
+
+.app-title-container {
+  width: calc(100% - 40px);
+}
+
+.app-intro {
+  font-size: large;
+}
+
+.app-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.app-menu-icon {
+  font-size: 1.25em;
+  width: 40px;
+  text-align: center;
+}
+.app-menu-bar1, .app-menu-bar2, .app-menu-bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: white;
+    margin: 6px 0;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+}
+.app-menu-bar3.show {
+  transform: rotate(45deg) translate(-8px, -8px);
+}
+.app-menu-bar2.show {
+  opacity: 0;
+  visibility: hidden;
+}
+.app-menu-bar1.show {
+  transform: rotate(-45deg) translate(-9px, 6px);
+}
+
+.app-spacer {
+  margin-top: 120px;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media screen and (min-width: 0px) and (max-width: 600px) {
+  .app-container {
+    width: 350px;
+    height: 350px;
+  }
+
+  .app-grid-header {
+    /* width: 350px; */
+    text-align: center;
+  }
+
+  .modal-popup {
+    width: 300px;
+    height: 400px;
+    font-size: large;
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .app-grid-header {
+    width: 480px;
+    text-align: center;
+  }
+}
+
+
+
+.app-grid-header {
+  margin: auto;
+}
+
+.app-button {
+  height: 50px;
+  width: 100px;
+  margin-left: 10px;
+  border: none;
+  color: white;
+  font-size: large;
+}
+
+.yes {
+  background-color: #43C59E
+}
+
+.no {
+  background-color: #ED254E
+}
+
+.new-game {
+  background-color: #48BEFF;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  /* background-color: #008CBA */
+}
+
+.app-card-item .overlay {
+  opacity: 0.40;
+}
