@@ -52,7 +52,6 @@ class HeaderTitle extends Component {
 
 class CardGrid extends Component {
   render() {
-    console.log(this.props)
     return (
       <section className="app-container">
         {
@@ -209,6 +208,7 @@ class InformationPanel extends Component {
             <span>Score:</span>
             <div>{this.props.score}</div>
           </div>
+          <LivesPanel lives={this.props.lives}/>
           <p className="app-intro">{`Which doggie is a(n) ${this.props.name}?`}</p>
       </div>
     )
@@ -250,6 +250,7 @@ class App extends Component {
   }
 
   handleCardClick(name) {
+    console.log(name, this.getCorrectDoggie().name)
     const correctGuess = (name === this.getCorrectDoggie().name)
     const wonGame = (this.state.score === 4)
     const lostGame = (this.state.lives === 1)
@@ -312,9 +313,9 @@ class App extends Component {
         <div className="app">
           <Header restartGame={this.restartGame.bind(this)}/>
           <Spacer/>
-          <InformationPanel score={score} name={correctDoggie.name}/>
+          <InformationPanel lives={this.state.lives} score={score} name={correctDoggie.name}/>
           <CardGrid correctDoggie={correctDoggie} doggies={currentDoggies} handleClick={this.handleCardClick.bind(this)}/>
-          <LivesPanel lives={this.state.lives}/>
+          {/* <LivesPanel lives={this.state.lives}/> */}
         </div>
       )
     } else {
