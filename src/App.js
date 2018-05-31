@@ -14,7 +14,6 @@ class Header extends Component {
     )
   }
 }
-
 class MenuIcon extends Component {
   state = { show: false }
 
@@ -53,7 +52,6 @@ class MenuIcon extends Component {
     )
   }
 }
-
 class HeaderTitle extends Component {
   render() {
     return (
@@ -64,10 +62,78 @@ class HeaderTitle extends Component {
   }
 }
 
+
+class WinView extends Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <img width={150} height={150} alt="win" src={win}/>
+        </div>
+        <div>
+          <p>You got 5 correct...</p>
+          <p>You Win!</p>
+        </div>
+        <div>
+          <button onClick={this.props.restartGame} className="Modal-button New-game">NEW GAME</button>
+        </div>
+      </div>
+    )
+  }
+}
+class LoseView extends Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <img width={150} height={150} alt="lose" src={lose}/>
+        </div>
+        <div>
+          <p>Oops! You missed 3 dogs in total.</p>
+          <p>You Lose...</p>
+        </div>
+        <div>
+          <button onClick={this.props.restartGame} className="Modal-button New-game">NEW GAME</button>
+        </div>
+      </div>
+    )
+  }
+}
+class RestartView extends Component {
+  render() {
+    return (
+      <div>
+        <div>
+          <img width={150} height={150} alt="restart" src={redo}/>
+        </div>
+        <div>
+          <p>Would you like to restart?</p>
+        </div>
+        <div>
+          <button onClick={this.props.restartGame} className="Modal-button Yes">YES</button>
+          <button onClick={this.props.keepGame} className="Modal-button No">NO</button>
+        </div>
+      </div>
+    )
+  }
+}
+class Modal extends Component {
+  render() {
+    return (
+        <div className="Modal">
+          <div className="Modal-popup">
+            {this.props.render}
+          </div>
+        </div>
+    )
+  }
+}
+
+
 class CardGrid extends Component {
   render() {
     return (
-      <div className="app-container">
+      <div className="Grid">
         {
           this.props.doggies.map((doggie, i) => <Card key={i} correctDoggie={this.props.correctDoggie} handleClick={this.props.handleClick} doggie={doggie}/>)
         }
@@ -75,7 +141,6 @@ class CardGrid extends Component {
     )
   }
 }
-
 class Card extends Component {
   state = {
     clicked: false
@@ -100,7 +165,7 @@ class Card extends Component {
     const cssString = (this.state.clicked && this.props.correctDoggie.name === this.props.doggie.name)? 'overlay yes' :
                       (this.state.clicked && this.props.correctDoggie.name !== this.props.doggie.name)? 'overlay no' : ''
     return (
-      <div className="app-card-item" onClick={this.handleClick.bind(this)}>
+      <div className="Grid-card" onClick={this.handleClick.bind(this)}>
         <p style={{margin: 'auto'}}>
           {this.props.doggie.name}
         </p>
@@ -110,13 +175,6 @@ class Card extends Component {
   }
 }
 
-class Spacer extends Component {
-  render() {
-    return (
-      <div className="app-spacer"/>
-    )
-  }
-}
 
 class LivesPanel extends Component {
   render() {
@@ -124,19 +182,19 @@ class LivesPanel extends Component {
     for (let i = 1; i < 4; i++) {
       if (i <= this.props.lives) {
         lifeIcons.push(
-            <div key={i} className="app-circle"/>
+            <div key={i} className="Circle"/>
         )
       } else {
         lifeIcons.push(
           <div key={i} style={{marginLeft: 40}}>
-            <div className="app-cross"/>
+            <div className="Cross"/>
           </div>
         )
       }
       
     }
     return (
-        <div className="app-container-lives">
+        <div className="Lives-container">
           {
             lifeIcons
           }
@@ -144,86 +202,16 @@ class LivesPanel extends Component {
     )
   }
 }
-
-class WinView extends Component {
-  render() {
-    return (
-      <div>
-        <div>
-          <img width={150} height={150} alt="win" src={win}/>
-        </div>
-        <div>
-          <p>You got 5 correct...</p>
-          <p>You Win!</p>
-        </div>
-        <div>
-          <button onClick={this.props.restartGame} className="app-button new-game">NEW GAME</button>
-        </div>
-      </div>
-    )
-  }
-}
-
-class LoseView extends Component {
-  render() {
-    return (
-      <div>
-        <div>
-          <img width={150} height={150} alt="lose" src={lose}/>
-        </div>
-        <div>
-          <p>Oops! You missed 3 dogs in total.</p>
-          <p>You Lose...</p>
-        </div>
-        <div>
-          <button onClick={this.props.restartGame} className="app-button new-game">NEW GAME</button>
-        </div>
-      </div>
-    )
-  }
-}
-
-class RestartView extends Component {
-  render() {
-    return (
-      <div>
-        <div>
-          <img width={150} height={150} alt="restart" src={redo}/>
-        </div>
-        <div>
-          <p>Would you like to restart?</p>
-        </div>
-        <div>
-          <button onClick={this.props.restartGame} className="app-button yes">YES</button>
-          <button onClick={this.props.keepGame} className="app-button no">NO</button>
-        </div>
-      </div>
-    )
-  }
-}
-
-class Modal extends Component {
-  render() {
-    return (
-        <div className="modal">
-          <div className="modal-popup">
-            {this.props.render}
-          </div>
-        </div>
-    )
-  }
-}
-
 class InformationPanel extends Component {
   render() {
     return (
-      <div className="app-grid-header">
-          <div className="app-scoreboard">
+      <div className="Information">
+          <div className="Information-scoreboard">
             <span>Score:</span>
             <div>{this.props.score}</div>
           </div>
           <LivesPanel lives={this.props.lives}/>
-          <p className="app-intro">{`Which doggie is a(n) ${this.props.name}?`}</p>
+          <p className="Information-intro">{`Which doggie is a(n) ${this.props.name}?`}</p>
       </div>
     )
   }
@@ -324,12 +312,11 @@ class App extends Component {
     const modalDiv = this.getModalView()
     if(this.state.gameState === 'progress'){
       return (
-        <div className="app">
+        <div className="App">
           <Header restartGame={this.restartGame.bind(this)}/>
-          <Spacer/>
+          <section className="Space"/>
           <InformationPanel lives={this.state.lives} score={score} name={correctDoggie.name}/>
           <CardGrid correctDoggie={correctDoggie} doggies={currentDoggies} handleClick={this.handleCardClick.bind(this)}/>
-          {/* <LivesPanel lives={this.state.lives}/> */}
         </div>
       )
     } else {
