@@ -7,33 +7,47 @@ import redo from './images/redo.svg'
 class Header extends Component {
   render() {
     return (
-      <header className="app-header">
+      <nav className="Header">
           <MenuIcon restartGame={this.props.restartGame}/>
           <HeaderTitle/>
-        </header>
+      </nav>
     )
   }
 }
 
 class MenuIcon extends Component {
   state = { show: false }
-  handleClick() {
+
+  handleRestart() {
+    this.setState({show: !this.state.show})
+    this.props.restartGame()
+  }
+
+  toggleMenu() {
     this.setState({show: !this.state.show})
   }
+
   render() {
     const {show} = this.state
-    const changeCss = (show)? 'show' : ''
-    const modalDiv = (show)? <Modal render={<RestartView restartGame={() => {this.props.restartGame(); this.handleClick(); }} keepGame={this.handleClick.bind(this)}/>}/> : null
+    const changeCss = (show)? 
+      'show' :
+      ''
+    const restartProp = <RestartView
+                          restartGame={this.handleRestart.bind(this)} 
+                          keepGame={this.toggleMenu.bind(this)}/>
+    const modalDiv = (show)? 
+      <Modal render={restartProp}/> : 
+      null
     
     return (
       <div>
         {
           modalDiv
         }
-        <menu className="app-menu-icon" onClick={this.handleClick.bind(this)}>
-          <div className={`app-menu-bar1 ${changeCss}`}/>
-          <div className={`app-menu-bar2 ${changeCss}`}/>
-          <div className={`app-menu-bar3 ${changeCss}`}/>
+        <menu className="Header-menu-icon" onClick={this.toggleMenu.bind(this)}>
+          <div className={`Header-menu-bar1 ${changeCss}`}/>
+          <div className={`Header-menu-bar2 ${changeCss}`}/>
+          <div className={`Header-menu-bar3 ${changeCss}`}/>
         </menu>
       </div>
     )
@@ -43,9 +57,9 @@ class MenuIcon extends Component {
 class HeaderTitle extends Component {
   render() {
     return (
-      <div className="app-title-container">
-        <h1 className="app-title">Doggie Name Game!</h1>
-      </div>
+      <header className="Header-Title-Container">
+        <h1 className="Header-Title">Doggie Name Game!</h1>
+      </header>
     )
   }
 }
