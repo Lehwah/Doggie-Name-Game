@@ -162,8 +162,8 @@ class Card extends Component {
   }
 
   render() {
-    const cssString = (this.state.clicked && this.props.correctDoggie.name === this.props.doggie.name)? 'overlay yes' :
-                      (this.state.clicked && this.props.correctDoggie.name !== this.props.doggie.name)? 'overlay no' : ''
+    const cssString = (this.state.clicked && this.props.correctDoggie.name === this.props.doggie.name)? 'overlay Yes' :
+                      (this.state.clicked && this.props.correctDoggie.name !== this.props.doggie.name)? 'overlay No' : ''
     return (
       <div className="Grid-card" onClick={this.handleClick.bind(this)}>
         <p style={{margin: 'auto'}}>
