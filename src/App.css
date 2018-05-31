@@ -44,14 +44,14 @@
   margin-left: 3px;
 }
 
-.app-cross {
+/* .app-cross {
   background: rgb(238, 123, 115);
   height: 100px;
   position: relative;
   width: 20px;
   transform: rotate(45deg)
-}
-.app-cross:after {
+} */
+/* .app-cross:after {
   background: rgb(238, 123, 115);
   content: "";
   height: 20px;
@@ -59,6 +59,23 @@
   position: absolute;
   top: 40px;
   width: 100px;
+} */
+
+.app-cross {
+  background: rgb(238, 123, 115);
+  height: 80px;
+  position: relative;
+  width: 15px;
+  transform: rotate(45deg)
+}
+.app-cross:after {
+  background: rgb(238, 123, 115);
+  content: "";
+  height: 15px;
+  left: -33px;
+  position: absolute;
+  top: 33px;
+  width: 80px;
 }
 
 .app-container {
