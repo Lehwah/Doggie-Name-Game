@@ -53,11 +53,11 @@ class HeaderTitle extends Component {
 class CardGrid extends Component {
   render() {
     return (
-      <section className="app-container">
+      <div className="app-container">
         {
           this.props.doggies.map((doggie, i) => <Card key={i} correctDoggie={this.props.correctDoggie} handleClick={this.props.handleClick} doggie={doggie}/>)
         }
-      </section>
+      </div>
     )
   }
 }
