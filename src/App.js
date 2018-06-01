@@ -6,13 +6,20 @@ import {InformationPanel} from './Information'
 import {CardGrid} from './CardGrid'
 import {doggieData} from './Data'
 
+const GAMESTATES = {
+  WIN: 'WIN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  LOADING: 'LOADING',
+  LOSS: 'LOSS'
+}
+
 class App extends Component {
   state = {
     score: 0,
     lives: 3,
     doggies: doggieData,
     currentDoggies: [],
-    gameState: 'pending' //'win' 'progress' 'lose' 'pending'
+    gameState: GAMESTATES.LOADING
   }
 
   componentDidMount() {
@@ -26,12 +33,12 @@ class App extends Component {
     const lostGame = (this.state.lives === 1)
 
     if (correctGuess && wonGame) {
-      this.setState({gameState: 'win'})
+      this.setState({gameState: GAMESTATES.WIN})
     } else if (correctGuess) {
       this.setState({score: this.state.score+1})
       this.randomizeDoggies() 
     } else if (!correctGuess && lostGame) {
-      this.setState({gameState: 'lose'})
+      this.setState({gameState: GAMESTATES.LOSS})
     } else {
       this.setState({lives: this.state.lives-1})
     }
@@ -54,7 +61,7 @@ class App extends Component {
 
     this.setState({
       currentDoggies: doggiesForRound, 
-      gameState: 'progress'
+      gameState: GAMESTATES.IN_PROGRESS
     })
   }
 
@@ -62,7 +69,7 @@ class App extends Component {
     this.setState({
       score: 0,
       lives: 3,
-      gameState: 'progress' //'win' 'progress' 'lose' 'pending'
+      gameState: GAMESTATES.IN_PROGRESS
     })
     this.randomizeDoggies()
   }
@@ -73,9 +80,9 @@ class App extends Component {
 
   getModalView() {
     switch (this.state.gameState) {
-      case 'win':
+      case GAMESTATES.WIN:
         return <WinView restartGame={this.restartGame.bind(this)}/>
-      case 'lose':
+      case GAMESTATES.LOSS:
         return <LoseView restartGame={this.restartGame.bind(this)}/>
       default:
         return null
@@ -86,8 +93,7 @@ class App extends Component {
     const {currentDoggies, score, lives, gameState} = this.state
     const correctDoggie = this.getCorrectDoggie()
     const modalDiv = this.getModalView()
-
-    if(gameState === 'progress'){
+    if (gameState === GAMESTATES.IN_PROGRESS) {
       return (
         <div className="App">
           <Header restartGame={this.restartGame.bind(this)}/>
