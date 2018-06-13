@@ -113,7 +113,8 @@ setDoggiesRandomly() {
     }
 
     const randomIndex = Math.round(Math.random() * 5)
-    doggiesForRound[randomIndex].isDoggie = true // The doggie to be in the header for “Which doggie is a(n) …?”
+    doggiesForRound[randomIndex].isDoggie = true 
+    // The doggie to be in the header title for “Which doggie is a(n) …?”
 
     this.setState({
       currentDoggies: doggiesForRound, 
