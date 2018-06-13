@@ -1,8 +1,10 @@
 # Doggie-Name-Game
 
+### Introduction
+
 The goal of this tutorial be to finish the implementation of a game called the `Doggie Name Game` using ReactJS. While completing this tutorial, we hope you learn something more about the process of creating simple applications in ReactJS as well as gain an introductory look at what a day in the life of a software engineer can look like. 
 
- In this game, the player is prompted to pick, out of 6, the breed of dog which is asked for on the screen. If the player picks 5 dogs in a row correctly they win. Otherwise, they lose. Players can also restart the game randomly by clicking on the hamburger menu and pressing ‘Yes’ on the modal which pops up.
+In this game, the player is prompted to pick, out of 6, the breed of dog which is asked for on the screen. If the player picks 5 dogs in a row correctly they win. Otherwise, they lose. Players can also restart the game randomly by clicking on the hamburger menu and pressing ‘Yes’ on the modal which pops up.
 
 As our web app stands, it currently has a `Header` tab, a set of `Counters` for Lives and Score, as well as a text prompting the user to correctly pick a specific dog by breed. Now, by looking at both the code and web app in the browser, let’s dissect what is going on in the code before we actually work on implementing the rest of our application.
 
@@ -20,7 +22,7 @@ class App extends Component {
     lives: 3,
     doggies: doggieData,
     currentDoggies: [],
-    gameState: GAMESTATES.LOADING // When the game starts, it will be loading until all of the doggies are present
+    gameState: GAMESTATES.LOADING //Game loads doggies at startup
   }
   ...
 }
@@ -38,7 +40,7 @@ class App extends Component {
     const { score, lives} = this.state
     return (
       <div className="App">
-        <Header restartGame={()=>{}}/> // The Header holds a hamburger which gets the ‘restartGame’ (currently no-op)
+        <Header restartGame={()=>{}}/> // Header holds components to restart game
         <section className="Space"/> // This element is solely for spacing
         <InformationPanel 
           lives={lives} 
@@ -64,17 +66,19 @@ import React, {Component} from 'react';
 
 export const CardGrid = (props) => 
   <div className="Grid">
-        {props.doggies.map((doggie, i) => <Card key={i} doggie={doggie} {...props}/>)} //This is a for loop which returns a total of 6 (# of doggies per round) Cards
+        { // This mapping returns 6 doggie Cards per round
+         props.doggies.map((doggie, i) => <Card key={i} doggie={doggie} {...props}/>)
+        } 
   </div>
   
 class Card extends Component {
   state = { clicked: false }
-  handleClick() {}
+  handleClick() {} // Currently no-op
   render() {
     const { doggie } = this.props
     return (
-      <div className="Grid-card" onClick={this.handleClick.bind(this)}> // for now, handle click does nothing
-        <p className="Auto">{doggie.name}</p> // Each Card holds a doggie and displays it’s name (for now)
+      <div className="Grid-card" onClick={this.handleClick.bind(this)}> 
+        <p className="Auto">{doggie.name}</p> // this will display a doggie name
       </div>
     )
   }
@@ -87,7 +91,7 @@ In `CardGrid` we are using what will be an array of doggy objects (containing bo
 In the `Card` element, we store a state variable which allows us to know whether or not a given card has been clicked or not. This will be useful when we wish to update how our cards look in the future. The Card renders the name of the dog it holds (in the final version, this will be an image and a name).
 
 
-THE NEXT SET OF CHANGES OCCUR IN APP.JS
+### Getting a Random Set of Doggies
 
 Before putting the `CardGrid` into our application, we must set up the functionality to cipher through the doggie data and select 6 dogs to be used in any given round of play. The method of choice for this will be called `setDoggiesRandomly`:
 
@@ -109,14 +113,14 @@ setDoggiesRandomly() {
     }
 
     const randomIndex = Math.round(Math.random() * 5)
-    doggiesForRound[randomIndex].isDoggie = true // This doggie will be the one displayed in the header “Which doggie is a(n) …?”
+    doggiesForRound[randomIndex].isDoggie = true // The doggie to be in the header for “Which doggie is a(n) …?”
 
     this.setState({
       currentDoggies: doggiesForRound, 
       gameState: GAMESTATES.IN_PROGRESS // The game has been put into progress!
     })
   }
- …
+ ...
 }
 ```
 
@@ -139,33 +143,37 @@ class App extends Component {
 We will also need to add a function which allows for us get whichever doggie is the selected one on a whim:
 
 ```javascript
+// App.js
 class App extends Component {
-…
+ ...
  getCorrectDoggie() {
     return this.state.currentDoggies.filter(doggie => doggie.isDoggie)[0]
   }
-…
+  ...
 }
 ```
+
+### Creating and Displaying Win/Lose States
 
 As players progress through the game, they will both win and lose. When either of these events happen, we want a modal, similar to the one which appears in the navigation bar. Thankfully, the ‘WinView and “LossView” components can just be exported and used.
 
 ```javascript
+// App.js
 import {WinView, LoseView} from './Modal'
 
 class App extends Component {
-…
-getModalView() {
-    switch (this.state.gameState) {
-      case GAMESTATES.WIN:
-        return <WinView restartGame={this.restartGame.bind(this)}/>
-      case GAMESTATES.LOSS:
-        return <LoseView restartGame={this.restartGame.bind(this)}/>
-      default:
-        return null
-    }
-  }
-…
+ ...
+ getModalView() {
+     switch (this.state.gameState) {
+       case GAMESTATES.WIN:
+         return <WinView restartGame={this.restartGame.bind(this)}/>
+       case GAMESTATES.LOSS:
+         return <LoseView restartGame={this.restartGame.bind(this)}/>
+       default:
+         return null
+     }
+   }
+ ...
 }
 ```
 
@@ -175,8 +183,9 @@ Here we are using the gameState to decide whether or not a win view, loss view o
 Sometimes, it will be necessary for us to restart the game (upon user request in the Header, upon a win or lost condition). In order to handle this, we will need a function to restart the game:
 
 ```javascript
+// App.js
 class App extends Component {
-…
+ ...
  restartGame() {
     this.setState({
       score: 0,
@@ -185,15 +194,18 @@ class App extends Component {
     })
     this.setDoggiesRandomly()
   }
-…
+  ...
 }
 ```
+
+### Adding Game Logic 
 
 We now have functions on our app component which will help us to do things such as set up our doggie data to be used in game format as well as change the overall state of the game itself. The only thing missing is the game logic. As you remember, we want to allow our opponent to pick the dogs until either the player loses all of his chances or, until the player wins the game. To denote a win, the player must guess 5 dogs correct before striking out. To strikeout, one must lose 3 times in total. The following function sets up our game logic. This logic can then be deployed to each card in order to set up transfer the game 
 
 ```javascript
+// App.js
 class App extends Component {
-…
+ ...
  handleCardClick(name) {
     const correctName = this.getCorrectDoggie().name
     const correctGuess = (name === correctName)
@@ -211,68 +223,70 @@ class App extends Component {
       this.setState({lives: this.state.lives-1})
     }
   }
-…
+  ...
 }
 ```
 
 With all of our pieces in place, we are ready to update the render method of our App and insert functionality
 
 ```javascript
+// App.js
 class App extends Component {
-…
-render() {
-    const {currentDoggies, score, lives, gameState} = this.state
-    const correctDoggie = this.getCorrectDoggie()
-    const modalDiv = this.getModalView()
-    if (gameState === GAMESTATES.IN_PROGRESS) {
-      return (
-        <div className="App">
-          <Header restartGame={this.restartGame.bind(this)}/>
-          <section className="Space"/>
-          <InformationPanel 
-            lives={lives} 
-            score={score} 
-            name={correctDoggie.name}/>
-          <CardGrid 
-            correctDoggie={correctDoggie} 
-            doggies={currentDoggies} 
-            handleClick={this.handleCardClick.bind(this)}/> //Each Card is given access to the inner Game logic of the app via this function
-        </div>
-      )
-    } else {
-      return (
-        <div className="app">
-          {modalDiv}
-        </div>
-      )
-    }
-  }
-…
+ ...
+ render() {
+     const {currentDoggies, score, lives, gameState} = this.state
+     const correctDoggie = this.getCorrectDoggie()
+     const modalDiv = this.getModalView()
+     if (gameState === GAMESTATES.IN_PROGRESS) {
+       return (
+         <div className="App">
+           <Header restartGame={this.restartGame.bind(this)}/>
+           <section className="Space"/>
+           <InformationPanel 
+             lives={lives} 
+             score={score} 
+             name={correctDoggie.name}/>
+           <CardGrid 
+             correctDoggie={correctDoggie} 
+             doggies={currentDoggies} 
+             handleClick={this.handleCardClick.bind(this)}/> // Pass Game Logic into each Card
+         </div>
+       )
+     } else {
+       return (
+         <div className="app">
+           {modalDiv}
+         </div>
+       )
+     }
+   }
+ ...
 }
 ```
-
-THE NEXT SET OF CHANGES OCCUR IN CardGrid/INDEX.JS
+### Implementing the Game Logic into the Cards
 
 With this new set up functions and data, we can finally update our Card Component to utilize them (we now see which props are used)
 
 First comes the render method:
 ```javascript
+// CardGrid/index.js
 class Card extends Component {
-...
-render() {
-    const {clicked} = this.state
-    const {correctDoggie, doggie} = this.props
-    const cssString = (clicked && correctDoggie.name === doggie.name)? 'overlay Yes' : //Complicated CSS, don’t worry too much if it is confusing!
-                      (clicked && correctDoggie.name !== doggie.name)? 'overlay No'  :
-                      ''
-    return (
-      <div className="Grid-card" onClick={this.handleClick.bind(this)}>
-        <p className="Auto">{doggie.name}</p>
-        <div className={cssString}/>
-      </div>
-    )
-  }
  ...
+ render() {
+     const {clicked} = this.state
+     const {correctDoggie, doggie} = this.props
+     // The following is just CSS, don't worry too much about understanding it!
+     const cssString = (clicked && correctDoggie.name === doggie.name)? 'overlay Yes' : 
+                       (clicked && correctDoggie.name !== doggie.name)? 'overlay No'  :
+                       ''
+     return (
+       <div className="Grid-card" onClick={this.handleClick.bind(this)}>
+         <p className="Auto">{doggie.name}</p>
+         <div className={cssString}/>
+       </div>
+     )
+   }
+  ...
  }
 ```
 
@@ -280,24 +294,26 @@ With potential animations in place, we are ready to allow our Card to be aware i
 
 ```javascript
 class Card extends Component {
-...
-handleClick() {
-    const {doggie, handleClick} = this.props
-    this.setState({clicked: true}); 
-    setTimeout(() => handleClick(doggie.name), 450)
-  }
+ // CardGrid/index.js
+ ...
+ handleClick() {
+     const {doggie, handleClick} = this.props
+     this.setState({clicked: true}); 
+     setTimeout(() => handleClick(doggie.name), 450)
+ }
   ...
-  }
+}
 
 With this, there is only ONE more item needed, and that is the ability to reset cards from a clicked state after a new round begins :
+
 class Card extends Component {
-...
-componentWillUpdate(prevProps) {
+ ...
+ componentWillUpdate(prevProps) {
     if (prevProps.doggie.name !== this.props.doggie.name) 
       this.setState({clicked: false})
   }
   ...
-  }
+ }
   ```
 
 
