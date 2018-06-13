@@ -4,13 +4,16 @@ The goal of this tutorial be to finish the implementation of a game called the `
 
  In this game, the player is prompted to pick, out of 6, the breed of dog which is asked for on the screen. If the player picks 5 dogs in a row correctly they win. Otherwise, they lose. Players can also restart the game randomly by clicking on the hamburger menu and pressing ‘Yes’ on the modal which pops up.
 
-As our web app stands, it currently has a Header tab, a set of counters for Lives and Score, as well as a text prompting the user to correctly pick a specific dog by breed. Now, by looking at both the code and web app in the browser, let’s dissect what is going on in the code before we actually work on implementing the rest of our application.
+As our web app stands, it currently has a `Header` tab, a set of `Counters` for Lives and Score, as well as a text prompting the user to correctly pick a specific dog by breed. Now, by looking at both the code and web app in the browser, let’s dissect what is going on in the code before we actually work on implementing the rest of our application.
 
 To better understand our application, let’s take a look at App.js and take a glance at the class named `App`.
+
+### Managing State and Rendering Content
 
 App holds an object called `state`. This object is what App uses to pass application specific data to other React Components. This is what the object looks like:
 
 ```javascript
+// App.js
 class App extends Component {
   state = {
     score: 0,
@@ -19,7 +22,7 @@ class App extends Component {
     currentDoggies: [],
     gameState: GAMESTATES.LOADING // When the game starts, it will be loading until all of the doggies are present
   }
- …
+  ...
 }
 ```
 
@@ -28,8 +31,9 @@ As you can probably tell, the score and lives fields hold the current count of t
 Lower down in App, we also have a `render` function which returns a Header, InformationPanel and a section for spacing. Each of these JSX elements exist in the Dom. You don’t have to know what each of these elements does besides a basic understanding of what each element does.  The Information Panel is responsible for showing game info like lives and the current dog which is to be guessed upon. In the Header, all that is relevant is to know that pressing the hamburger menu will cause a modal to pop up on the screen with a Y/N option set. By picking Y, you will be activating the restartGame prop passed into the Header Component, otherwise, nothing will happen and the modal will go away. 
 
 ```javascript
+// App.js
 class App extends Component {
- …
+ ...
  render() {
     const { score, lives} = this.state
     return (
@@ -50,12 +54,12 @@ class App extends Component {
 }
 ```
 
-
-THE NEXT SET OF CHANGES OCCUR IN CardGrid/index.js
+### Building Out Cards
 
 Now, it is time to create a Grid for 6 cards to be displayed. This will be where the dogs will be picked. Start by creating a folder under `/src` called `CardGrid. Then make a file inside of it called `index.js`. From here, we can start creating both a CardGrid Component as well as a Card Component. Here is some boilerplate code for the file to get started:
 
 ```javascript
+// CardGrid/index.js
 import React, {Component} from 'react';
 
 export const CardGrid = (props) => 
@@ -89,8 +93,9 @@ Before putting the `CardGrid` into our application, we must set up the functiona
 
 
 ```javascript
+// App.js
 class App extends Component {
-…
+...
 setDoggiesRandomly() {
     const { doggies } = this.state // All of the existing doggie elements
     const doggieCount = doggies.length
@@ -111,22 +116,23 @@ setDoggiesRandomly() {
       gameState: GAMESTATES.IN_PROGRESS // The game has been put into progress!
     })
   }
-…
+ …
 }
 ```
 
-In essence, this function randomly takes 6 of the doggies from the data and sets one of them to have an ‘isDoggie’ field which is true. By doing this, the doggie which will be chosen in the Header Title of the Header Component is decided. What is more, the doggie object with the ‘isDoggie’ field set to true is attached to the card (or one of the cards) which contains it. Selecting this card leads to getting a point. 
+In essence, this function randomly takes 6 of the doggies from the data and sets one of them to have an ‘isDoggie’ field which is true (the others are set to false). By doing this, the doggie which will be chosen in the Header Title of the Header Component is decided. What is more, the doggie object with the ‘isDoggie’ field set to true is attached to the card (or one of the multiple cards) which contains that name. Selecting this card (or cards) leads to getting a point. 
 
 
 As this function sets up our first batch of 6 dogs for a round and sets our game state to IN_PROGRESS, it would only make sense that it also be called right before the game begins. Luckily, React allows us to call this method in the very beginning of the components existing (near the beginning of what is called it’s lifecycle method)
 
 ```javascript
+// App.js
 class App extends Component {
-…
+ ...
  componentDidMount() { //This runs the second the React Component mounts to the DOM
     this.setDoggiesRandomly()
   }
-
+ ...
 }
 ```
 
